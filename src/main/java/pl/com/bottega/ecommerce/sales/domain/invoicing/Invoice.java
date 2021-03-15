@@ -45,13 +45,6 @@ public class Invoice {
         return new InvoiceBuilder();
     }
 
-    public void addItem(InvoiceLine item) {
-        items.add(item);
-
-        net = net.add(item.getNet());
-        gros = gros.add(item.getGros());
-    }
-
     /**
      * 
      * @return immutable projection
