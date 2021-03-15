@@ -18,11 +18,14 @@ import java.util.List;
 import pl.com.bottega.ecommerce.canonicalmodel.publishedlanguage.ClientData;
 import pl.com.bottega.ecommerce.canonicalmodel.publishedlanguage.Id;
 import pl.com.bottega.ecommerce.sharedkernel.Money;
+import pl.com.bottega.ecommerce.sales.domain.invoicing.Invoice.InvoiceBuilder;
 
 public class BookKeeper {
 
     public Invoice issuance(ClientData client, List<RequestItem> items) {
-        Invoice invoice = new Invoice(Id.generate(), client);
+        InvoiceBuilder invoiceBuilder = Invoice.builder()
+                .setId(Id.generate())
+                .setClient(client);
 
         for (RequestItem item : items) {
             Money net = item.getTotalCost();
@@ -52,10 +55,10 @@ public class BookKeeper {
             Tax tax = new Tax(taxValue, desc);
 
             InvoiceLine invoiceLine = new InvoiceLine(item.getProductData(), item.getQuantity(), net, tax);
-            invoice.addItem(invoiceLine);
+            invoiceBuilder.addItem(invoiceLine);
         }
 
-        return invoice;
+        return invoiceBuilder.build();
     }
 
 }
